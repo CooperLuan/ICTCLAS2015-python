@@ -5,11 +5,12 @@ __author__ = 'Peter_Howe<haobibo@gmail.com>'
 Python Warpper for ICTCLAS2014
 Loading functions from Dynamic Link Library  directly.
 '''
+import sys
 from ctypes import *
 
 #NLPIR2014 Lib File (NLPIR64, NLPIR32, libNLPIR64.so, libNLPIR32.so),
 #Change this when you are not using a Win64 environment:
-libFile = './nlpir/libNLPIR64.so'
+libFile = './lib/libNLPIR64.so'
 
 dll =  CDLL(libFile)
 def loadFun(exportName, restype, argtypes):
@@ -241,7 +242,10 @@ def Seg(paragraph):
         yield (i, a.sPOS)
 
 if __name__ == "__main__":
-    p = "Big News: @解放日报 [最右]【呼市铁路局原副局长被判死缓 最头痛藏钱】2013年12月底，呼市铁路局原副局长马俊飞因受贿被判死缓。他说最头痛藏钱，从呼和浩特到北京，马俊飞又是购房又是租房，在挥之不去的恐惧中，人民币8800万、美元419万、欧元30万、港币27万，黄金43.3公斤，逐渐堆满了两所房子…… http://t.cn/8kgR6Yi"
+    if len(sys.argv) >= 2:
+        p = ' '.join(sys.argv[1:])
+    else:
+        p = "Big News: @解放日报 [最右]【呼市铁路局原副局长被判死缓 最头痛藏钱】2013年12月底，呼市铁路局原副局长马俊飞因受贿被判死缓。他说最头痛藏钱，从呼和浩特到北京，马俊飞又是购房又是租房，在挥之不去的恐惧中，人民币8800万、美元419万、欧元30万、港币27万，黄金43.3公斤，逐渐堆满了两所房子…… http://t.cn/8kgR6Yi"
     for t in Seg(p):
         s = '%s\t%s\t%s' % (t[0],t[1],translatePOS(t[1]))
         print(s)
